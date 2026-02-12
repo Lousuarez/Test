@@ -1,0 +1,13 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  
+  # Garante que arquivos .tsx e .ts sejam servidos como JavaScript
+  AddType application/javascript .ts .tsx
+
+  # Se o arquivo ou diretório solicitado não existir, redireciona para o index.html
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /index.html [L]
+</IfModule>

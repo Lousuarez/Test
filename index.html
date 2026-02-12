@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lourenço Suarez</title>
+    <meta name="description" content="Perfil profissional de Lourenço Suarez - Em Breve">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,6 +15,7 @@
             scroll-behavior: smooth;
             margin: 0;
             padding: 0;
+            background-color: #f0f9ff;
         }
         .fade-in {
             animation: fadeIn 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -30,18 +32,20 @@
                 radial-gradient(at 100% 0%, hsla(195,100%,92%,1) 0, transparent 50%);
         }
     </style>
-<script type="importmap">
-{
-  "imports": {
-    "react": "https://esm.sh/react@^19.2.4",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-    "react/": "https://esm.sh/react@^19.2.4/",
-    "lucide-react": "https://esm.sh/lucide-react@^0.563.0"
-  }
-}
-</script>
+    <script type="importmap">
+    {
+      "imports": {
+        "react": "https://esm.sh/react@^19.2.4",
+        "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+        "react/": "https://esm.sh/react@^19.2.4/",
+        "lucide-react": "https://esm.sh/lucide-react@^0.563.0"
+      }
+    }
+    </script>
 </head>
 <body class="bg-sky-50 text-slate-900 selection:bg-blue-200">
     <div id="root"></div>
+    <!-- Script explícito para funcionamento fora do ambiente de desenvolvimento -->
+    <script type="module" src="./index.tsx"></script>
 </body>
 </html>
