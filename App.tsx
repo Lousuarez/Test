@@ -82,7 +82,7 @@ const App: React.FC = () => {
   const CLIENT_ID = '201813';
   const CLIENT_SECRET = '9554fcf77b834261de21765727debe5e89f02062';
   const ATHLETE_ID = '49665406';
-  const INITIAL_TOKEN = '18967df43040849a9ceed84168155e57c3a5baaa'; // Atualizado conforme última imagem
+  const INITIAL_TOKEN = '18967df43040849a9ceed84168155e57c3a5baaa';
 
   const getCleanRedirectUri = () => {
     const url = new URL(window.location.origin + window.location.pathname);
@@ -119,7 +119,6 @@ const App: React.FC = () => {
         setStravaStatus('sucesso');
         fetchActivities(token);
       } else {
-        console.warn('Token inicial inválido ou expirado');
         setStravaStatus('pendente');
       }
     } catch (e) {
@@ -294,10 +293,10 @@ const App: React.FC = () => {
                   <div key={act.id} onClick={() => handleOpenActivity(act)} className="glass-card group rounded-[2.5rem] overflow-hidden flex flex-col md:flex-row cursor-pointer">
                     <div className="md:w-[32%] lg:w-[35%] relative min-h-[220px] md:min-h-[300px] bg-[#fdfdfd] overflow-hidden">
                       {photoUrl ? (
-                        <img src={photoUrl} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="" />
+                        <img src={photoUrl} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Destaque do Treino" />
                       ) : (
                         <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100">
-                          <Activity size={48} className="text-slate-200" strokeWidth={1.5} />
+                          <Activity size={64} className="text-slate-200" strokeWidth={1.5} />
                         </div>
                       )}
                       <span className="absolute top-8 left-8 bg-white/95 backdrop-blur-md px-4 py-2 rounded-full text-[9px] font-black tracking-[0.2em] text-slate-900 shadow-xl border border-white/50">{translateType(act.type)}</span>
@@ -307,7 +306,11 @@ const App: React.FC = () => {
                         <span className="flex items-center gap-2 bg-slate-50 px-3 py-1 rounded-lg"><Calendar size={14} className="text-cyan-500" />{new Date(act.start_date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase()}</span>
                         {act.average_heartrate && <span className="flex items-center gap-1 text-rose-500 font-black"><Heart size={12} fill="currentColor" className="animate-pulse" />{act.average_heartrate.toFixed(0)} BPM</span>}
                       </div>
-                      <h3 className="text-xl md:text-2xl font-black text-slate-800 tracking-tight group-hover:text-cyan-600 transition-colors leading-tight">{act.name}</h3>
+                      
+                      <div className="flex items-center gap-3">
+                        <h3 className="text-xl md:text-2xl font-black text-slate-800 tracking-tight group-hover:text-cyan-600 transition-colors leading-tight">{act.name}</h3>
+                      </div>
+
                       <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 pt-6 border-t border-slate-50">
                         <SimpleMetric label="DISTÂNCIA" value={(act.distance / 1000).toFixed(2)} unit="KM" />
                         <SimpleMetric label="TEMPO" value={formatDuration(act.moving_time)} />
@@ -338,7 +341,13 @@ const App: React.FC = () => {
             <div className="overflow-y-auto custom-scrollbar flex-1">
               <div className="w-full bg-slate-100 relative h-[400px] md:h-[550px] flex items-center justify-center overflow-hidden">
                 {isLoadingDetails ? <Loader2 className="animate-spin text-cyan-500" size={48} /> : (
-                  <img src={getPhotoUrl(selectedActivity) || ''} className="w-full h-full object-cover" alt="" />
+                  getPhotoUrl(selectedActivity) ? (
+                    <img src={getPhotoUrl(selectedActivity) || ''} className="w-full h-full object-cover" alt="Destaque do Treino" />
+                  ) : (
+                    <div className="w-full h-full flex flex-col items-center justify-center bg-slate-50">
+                      <Activity size={100} className="text-slate-200" strokeWidth={1} />
+                    </div>
+                  )
                 )}
                 <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-black/60 to-transparent"></div>
                 <div className="absolute bottom-10 left-10 text-white">
@@ -346,7 +355,9 @@ const App: React.FC = () => {
                      <span className="bg-orange-500 px-3 py-1 rounded-lg text-[9px] font-black tracking-widest uppercase">{translateType(selectedActivity.type)}</span>
                      <span className="text-[10px] font-bold opacity-80">{new Date(selectedActivity.start_date).toLocaleDateString()}</span>
                    </div>
-                   <h2 className="text-3xl md:text-5xl font-black tracking-tighter leading-none">{selectedActivity.name}</h2>
+                   <div className="flex items-center gap-4">
+                     <h2 className="text-3xl md:text-5xl font-black tracking-tighter leading-none">{selectedActivity.name}</h2>
+                   </div>
                 </div>
               </div>
               <div className="p-10 md:p-16 space-y-16">
