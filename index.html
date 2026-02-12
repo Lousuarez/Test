@@ -3,112 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lourenço Suarez</title>
-    <meta name="description" content="Perfil profissional de Lourenço Suarez - Natal">
+    <title>Lourenço Suarez | Performance Dashboard</title>
+    <meta name="description" content="Análise de Performance - Lourenço Suarez">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Inter', sans-serif;
-            scroll-behavior: smooth;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
             margin: 0;
             padding: 0;
-            background-color: #f0f9ff;
-            overflow: hidden;
-        }
-        .fade-in {
-            animation: fadeIn 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); filter: blur(10px); }
-            to { opacity: 1; transform: translateY(0); filter: blur(0); }
+            overflow-x: hidden;
         }
         .bg-mesh {
-            background-color: #f0f9ff;
+            background-color: #f8fafc;
             background-image: 
-                radial-gradient(at 0% 0%, hsla(201,100%,90%,1) 0, transparent 50%), 
-                radial-gradient(at 50% 0%, hsla(210,100%,95%,1) 0, transparent 50%), 
-                radial-gradient(at 100% 0%, hsla(195,100%,92%,1) 0, transparent 50%);
+                radial-gradient(at 0% 0%, rgba(6, 182, 212, 0.08) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(59, 130, 246, 0.08) 0px, transparent 50%);
         }
-
-        /* Neve */
-        .snowflake {
-            color: #fff;
-            font-size: 1.2em;
-            font-family: Arial, sans-serif;
-            text-shadow: 0 0 5px rgba(255,255,255,1);
-            position: fixed;
-            top: -10%;
-            z-index: 9999;
-            user-select: none;
-            cursor: default;
-            animation-name: snowflakes-fall, snowflakes-shake;
-            animation-duration: 10s, 3s;
-            animation-timing-function: linear, ease-in-out;
-            animation-iteration-count: infinite, infinite;
-            animation-play-state: running, running;
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.02);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        @keyframes snowflakes-fall {
-            0% { top: -10%; }
-            100% { top: 100%; }
+        .glass-card:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.9);
+            border-color: rgba(6, 182, 212, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.04);
         }
-        @keyframes snowflakes-shake {
-            0%, 100% { transform: translateX(0); }
-            50% { transform: translateX(80px); }
+        .fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
         }
-
-        /* Luzes de Natal */
-        .light {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            margin: 0 10px;
-            position: relative;
-            animation-name: blink;
-            animation-duration: 1.5s;
-            animation-iteration-count: infinite;
-            display: inline-block;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        .light:before {
-            content: "";
-            position: absolute;
-            background: #222;
-            width: 6px;
-            height: 4px;
-            top: -4px;
-            left: 3px;
-        }
-        @keyframes blink {
-            0%, 100% { opacity: 0.3; transform: scale(0.9); box-shadow: 0 0 0px transparent; }
-            50% { opacity: 1; transform: scale(1.1); box-shadow: 0 0 15px currentColor; }
-        }
-        .light-red { color: #ff4d4d; background: #ff4d4d; animation-delay: 0s; }
-        .light-green { color: #4dff88; background: #4dff88; animation-delay: 0.4s; }
-        .light-blue { color: #4d94ff; background: #4d94ff; animation-delay: 0.8s; }
-        .light-gold { color: #ffdb4d; background: #ffdb4d; animation-delay: 1.2s; }
-
-        .lights-wire {
-            position: absolute;
-            top: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            white-space: nowrap;
-            z-index: 20;
-            width: 100%;
-            text-align: center;
-        }
-        .lights-wire::after {
-            content: "";
-            position: absolute;
-            top: 6px;
-            left: 0;
-            width: 100%;
-            height: 1px;
-            background: rgba(0,0,0,0.1);
-            z-index: -1;
-        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #e2e3e8; border-radius: 10px; }
     </style>
     <script type="importmap">
     {
@@ -121,7 +59,7 @@
     }
     </script>
 </head>
-<body class="bg-sky-50 text-slate-900 selection:bg-blue-200">
+<body class="bg-mesh">
     <div id="root"></div>
     <script type="module" src="./index.tsx"></script>
 </body>
