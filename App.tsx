@@ -3,7 +3,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { 
   Activity, MapPin, Clock, Zap, TrendingUp, 
   Heart, Flame, Calendar, ChevronRight, ChevronLeft,
-  Navigation2, Maximize2, ExternalLink, Camera, X, Info, Loader2
+  Navigation2, Maximize2, ExternalLink, Camera, X, Info, Loader2, Image as ImageIcon
 } from 'lucide-react';
 
 interface StravaActivity {
@@ -183,21 +183,19 @@ const App: React.FC = () => {
   const getPhotoUrl = (act: any) => {
     if (!act) return null;
     
-    // Tenta encontrar em photos.primary
     if (act.photos?.primary) {
       const url = extractUrlFromObject(act.photos.primary);
       if (url) return url;
     }
 
-    // Tenta o primeiro item da galeria se disponível
     if (act.photos?.all && Array.isArray(act.photos.all) && act.photos.all.length > 0) {
       const url = extractUrlFromObject(act.photos.all[0]);
       if (url) return url;
     }
 
-    // Fallback legado
     if (act.primary_photo) {
-      return extractUrlFromObject(act.primary_photo);
+      const url = extractUrlFromObject(act.primary_photo);
+      if (url) return url;
     }
 
     return null;
@@ -207,11 +205,9 @@ const App: React.FC = () => {
     if (!act) return [];
     const urls: string[] = [];
     
-    // Inclui a foto primária se existir
     const main = getPhotoUrl(act);
     if (main) urls.push(main);
     
-    // Inclui todas as outras da galeria detalhada
     if (act.photos?.all && Array.isArray(act.photos.all)) {
       act.photos.all.forEach((p: any) => {
         const u = extractUrlFromObject(p);
@@ -353,7 +349,7 @@ const App: React.FC = () => {
                   onClick={() => handleOpenActivity(act)}
                   className="glass-card group rounded-[2rem] overflow-hidden flex flex-col md:flex-row cursor-pointer transition-all duration-300 hover:shadow-lg"
                 >
-                  <div className="md:w-[32%] lg:w-[35%] relative overflow-hidden flex items-center justify-center min-h-[220px] md:min-h-[300px] bg-slate-50">
+                  <div className="md:w-[32%] lg:w-[35%] relative overflow-hidden flex items-center justify-center min-h-[220px] md:min-h-[300px] bg-[#fdfdfd]">
                     {photoUrl ? (
                       <img 
                         src={photoUrl} 
@@ -362,20 +358,27 @@ const App: React.FC = () => {
                         loading="lazy"
                       />
                     ) : (
-                      <div className="flex flex-col items-center justify-center w-full h-full relative bg-gradient-to-br from-slate-50 to-slate-100/30">
-                         <div className="absolute inset-0 opacity-[0.5] bg-[radial-gradient(circle_at_center,rgba(6,182,212,0.08)_0%,transparent_75%)]"></div>
-                         <div className="relative">
-                            <div className="absolute inset-0 bg-cyan-400/10 blur-2xl rounded-full scale-150"></div>
-                            <Activity 
-                              size={44} 
-                              className="text-slate-200 relative z-10 transition-colors duration-500 group-hover:text-cyan-200/50" 
-                            />
+                      <div className="flex flex-col items-center justify-center w-full h-full relative overflow-hidden bg-gradient-to-br from-slate-50 to-slate-100/30">
+                         <div className="absolute inset-0 opacity-[0.5] bg-[radial-gradient(circle_at_center,rgba(6,182,212,0.1)_0%,transparent_70%)]"></div>
+                         <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-cyan-500/5 rounded-full blur-3xl"></div>
+                         <div className="relative flex flex-col items-center gap-3">
+                            <div className="relative">
+                               <div className="absolute inset-0 bg-cyan-400/5 blur-xl rounded-full scale-150"></div>
+                               <Activity 
+                                 size={42} 
+                                 className="text-slate-200 relative z-10 transition-all duration-500 group-hover:text-cyan-500/30 group-hover:scale-110" 
+                                 strokeWidth={1.5}
+                               />
+                            </div>
+                            <span className="text-[7px] font-black uppercase tracking-[0.5em] text-slate-300/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                               Destaque da Atividade
+                            </span>
                          </div>
-                         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-4 h-[1px] bg-slate-200"></div>
+                         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-3 h-[1.5px] bg-slate-200 group-hover:w-8 group-hover:bg-cyan-500/20 transition-all duration-700"></div>
                       </div>
                     )}
                     <div className="absolute top-6 left-6 z-20">
-                      <span className="bg-white/95 backdrop-blur-sm px-3 py-1 rounded-full text-[8px] font-bold tracking-widest text-slate-900 shadow-sm border border-white/50">
+                      <span className="bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-full text-[8px] font-black tracking-[0.2em] text-slate-900 shadow-sm border border-white/50">
                         {translateType(act.type)}
                       </span>
                     </div>
@@ -442,7 +445,6 @@ const App: React.FC = () => {
                       alt="" 
                     />
                     
-                    {/* Controles de Navegação */}
                     {selectedActivityPhotos.length > 1 && (
                       <>
                         <button 
@@ -486,13 +488,14 @@ const App: React.FC = () => {
                     <span className="text-[10px] font-black text-cyan-600 uppercase tracking-[0.4em]">{translateType(selectedActivity.type)}</span>
                   </div>
                   <h2 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight leading-tight">{selectedActivity.name}</h2>
-                </div>
-
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-10 py-10 border-y border-slate-50">
-                  <Metric label="DISTÂNCIA" value={(selectedActivity.distance / 1000).toFixed(2)} unit="KM" large />
-                  <Metric label="TEMPO" value={formatDuration(selectedActivity.moving_time)} large />
-                  <Metric label="CALORIAS" value={selectedActivity.calories?.toFixed(0) || '--'} unit="KCAL" large />
-                  <Metric label="MÁXIMA" value={(selectedActivity.max_speed * 3.6).toFixed(1)} unit="KM/H" large />
+                  
+                  {/* Métricas reorganizadas em linha única com ícones destacados */}
+                  <div className="flex flex-wrap items-center gap-x-12 gap-y-8 py-10 border-y border-slate-50 justify-between md:justify-start">
+                    <Metric icon={<MapPin size={24} className="text-cyan-500" />} label="DISTÂNCIA" value={(selectedActivity.distance / 1000).toFixed(2)} unit="KM" large />
+                    <Metric icon={<Clock size={24} className="text-cyan-500" />} label="TEMPO" value={formatDuration(selectedActivity.moving_time)} large />
+                    <Metric icon={<Flame size={24} className="text-cyan-500" />} label="CALORIAS" value={selectedActivity.calories?.toFixed(0) || '--'} unit="KCAL" large />
+                    <Metric icon={<Zap size={24} className="text-cyan-500" />} label="VEL. MÁXIMA" value={(selectedActivity.max_speed * 3.6).toFixed(1)} unit="KM/H" large />
+                  </div>
                 </div>
 
                 {(selectedActivity.average_heartrate || selectedActivity.max_heartrate) && (
@@ -562,16 +565,19 @@ const App: React.FC = () => {
   );
 };
 
-const Metric = ({ label, value, unit = "", large = false }: { label: string, value: string | number, unit?: string, large?: boolean }) => (
-  <div className="space-y-2">
-    <div className="text-slate-300 uppercase tracking-[0.3em] text-[8px] md:text-[9px] font-black">
-      {label}
-    </div>
-    <div className="flex items-baseline gap-1.5">
-      <span className={`${large ? 'text-2xl md:text-3xl' : 'text-lg md:text-xl'} font-black text-slate-800 tracking-tighter leading-none`}>
-        {value}
-      </span>
-      {unit && <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{unit}</span>}
+const Metric = ({ label, value, unit = "", large = false, icon }: { label: string, value: string | number, unit?: string, large?: boolean, icon?: React.ReactNode }) => (
+  <div className="flex items-start gap-4">
+    {icon && <div className="mt-1">{icon}</div>}
+    <div className="space-y-1.5">
+      <div className="text-slate-300 uppercase tracking-[0.3em] text-[8px] md:text-[9px] font-black">
+        {label}
+      </div>
+      <div className="flex items-baseline gap-1.5">
+        <span className={`${large ? 'text-2xl md:text-3xl' : 'text-lg md:text-xl'} font-black text-slate-800 tracking-tighter leading-none`}>
+          {value}
+        </span>
+        {unit && <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{unit}</span>}
+      </div>
     </div>
   </div>
 );
